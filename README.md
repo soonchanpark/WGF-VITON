@@ -7,6 +7,9 @@ The code and pre-trained models are tested with pytorch 1.31.1, torchvision 0.13
 ## Usage
 WG-VITON is a single stage network to synthesize VITON image simultanously using top and bottom clothes. 
 
+## Dataset : Fashion-TB
+![Teaser](./data_teaser.png)
+
 ## Installation
 ```
 conda create -n {name} python=3.8 anaconda
@@ -15,8 +18,7 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvi
 pip install cupy
 ```
 
-## Dataset : Fashion-TB
-![Teaser](./data_teaser.png)
+
 
 
 ## Training
