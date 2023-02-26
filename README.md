@@ -16,6 +16,8 @@ pip install cupy
 ```
 
 ## Dataset : Fashion-TB
+![Teaser](./data_teaser.png)
+
 
 ## Training
 
