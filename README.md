@@ -1,4 +1,4 @@
-# WG-VITON is a single stage network to synthesize VITON image simultanously using top and bottom clothes. (Under review)
+# WG-VITON: Wearing-guide Virtual Try-on for Top and Bottom Clothes. (Under review)
 Official implementation for "WG-VITON: Wearing-guide Virtual Try-on for Top and Bottom Clothes".
 The code and pre-trained models are tested with pytorch 1.31.1, torchvision 0.13.1, Python 3.8, CUDA 11.6.
 
