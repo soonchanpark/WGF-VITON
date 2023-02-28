@@ -38,7 +38,14 @@ python test.py --dataroot {data_path} --wearing {test json file} --gpu_ids 0 -b 
 All material is made available under [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You can **use, redistribute, and adapt** the material for **non-commercial purposes**, as long as you give appropriate credit by **citing our paper** and **indicate any changes** that you've made.
 
 ## Citation
-TBD.
+```
+@article{park2022single,
+  title={Single Stage Virtual Try-On with Top and Bottom Clothes Controlling Wearing Styles},
+  author={Park, Soonchan and Park, Jinah},
+  journal={arXiv preprint arxiv:12341234},
+  year={2023}
+}
+```
 
 ## Acknoledgements
 We implemente the code for WG-VITON based on PyTorch implementation of [CP-VTON](https://github.com/sergeywong/cp-vton), [SPADE](https://github.com/NVlabs/SPADE), and [HR-VITON](https://github.com/sangyun884/HR-VITON).
