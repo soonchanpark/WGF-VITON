@@ -1,5 +1,5 @@
-# WG-VITON: Wearing-guide Virtual Try-on for Top and Bottom Clothes. (Under review)
-Official implementation for "WG-VITON: Wearing-guide Virtual Try-on for Top and Bottom Clothes".
+# Single Stage Virtual Try-On with Top and Bottom Clothes Controlling Wearing Styles (Under review)
+Official implementation for "Single Stage Virtual Try-On with Top and Bottom Clothes Controlling Wearing Styles".
 The code and pre-trained models are tested with pytorch 1.31.1, torchvision 0.13.1, Python 3.8, CUDA 11.6.
 
 ![Teaser](./fig_WGVITONresult3x3.png)
