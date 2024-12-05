@@ -5,7 +5,7 @@ The code and pre-trained models are tested with pytorch 1.31.1, torchvision 0.13
 ![Teaser](./fig_WGVITONresult3x3.png)
 
 ## Usage
-WGF-VITON is a single stage network to synthesize VITON image simultanously using top and bottom clothes. 
+WGF-VITON is a single stage network to synthesize VITON image simultanously using top and bottom clothes with wearing style control.
 
 ## Dataset : Fashion-TB
 ![Teaser](./data_teaser.png)
@@ -19,18 +19,22 @@ pip install cupy
 ```
 
 ## Installation (Docker)
-
+The folder "docker" has Dockerfile to set docker images for running WGF-VITON
+```
+cd docker
+docker build . -t {docker_image_name}
+```
 
 ## Training
 
 ```python
-python train.py --dataroot {data_path} --keep_step 50000 --decay_step 150000 --gpu_ids 0 -b 4
+python train.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --keep_step 50000 --decay_step 150000 -b 4
 ```
 
 ## Test
 
 ```python
-python test.py --dataroot {data_path} --wearing {test json file} --gpu_ids 0 -b 8 --checkpoint {checkpoint_path}
+python test.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --wearing {test json file} -b 8 --checkpoint {checkpoint_path}
 ```
 
 ## License
@@ -40,10 +44,10 @@ All material is made available under [Creative Commons BY-NC 4.0](https://creati
 ## Citation
 ```
 @article{park2022single,
-  title={Single Stage Virtual Try-On with Top and Bottom Clothes Controlling Wearing Styles},
+  title={Full-body Virtual Try-on using Top and Bottom Garments with Wearing Style Control},
   author={Park, Soonchan and Park, Jinah},
-  journal={arXiv preprint arxiv:12341234},
-  year={2023}
+  journal={Computer Vision and Image Understanding},
+  year={2024}
 }
 ```
 
