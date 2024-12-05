@@ -254,9 +254,9 @@ def make_grid(N, iH, iW):
     grid = torch.cat([grid_x, grid_y], 3).cuda()
     return grid
 
-class WGVITON(nn.Module):
+class WGFVITON(nn.Module):
     def __init__(self, opt, item_nc, model_nc, output_nc, ngf=64, norm_G = 'spectralinstance', norm_layer=nn.BatchNorm2d, target_height=256):
-        super(WGVITON, self).__init__()
+        super(WGFVITON, self).__init__()
         self.warp_feature = 256
         self.out_layer_opt = 256
         self.SPADE_input = 3+3+3 # top img, bt img, Ia img, densepose
@@ -660,8 +660,8 @@ class SPADE(nn.Module):
 
        if param_free_norm_type == 'instance':
            self.param_free_norm = nn.InstanceNorm2d(norm_nc, affine=False)
-       elif param_free_norm_type == 'syncbatch':
-           self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
+       #elif param_free_norm_type == 'syncbatch':
+       #    self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
        elif param_free_norm_type == 'batch':
            self.param_free_norm = nn.BatchNorm2d(norm_nc, affine=False)
        else:

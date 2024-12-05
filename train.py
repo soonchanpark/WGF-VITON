@@ -7,11 +7,11 @@ import argparse
 import os
 import time
 from FTB_dataset import FTB_dataset, FTBDataLoader
-from networks import VGGLoss, load_checkpoint, save_checkpoint, MultiscaleDiscriminator, WGVITON,GANLoss
+from networks import VGGLoss, load_checkpoint, save_checkpoint, MultiscaleDiscriminator, WGFVITON,GANLoss
 from networks import make_grid as mkgrid
 
 from tensorboardX import SummaryWriter
-from visualization import board_add_image, board_add_images, vis_densepose
+from visualization import board_add_images, vis_densepose
 
 from torch.autograd import Variable
 from utils import create_network
@@ -19,16 +19,14 @@ from utils import create_network
 import cv2
 import numpy as np
 
-
 def get_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--name", default = "WGVITON")
+    parser.add_argument("--name", default = "WGFVITON")
     parser.add_argument("--gpu_ids", default = "")
     parser.add_argument('-j', '--workers', type=int, default=1)
     parser.add_argument('-b', '--batch-size', type=int, default=4)    
     parser.add_argument("--dataroot", default = "data")
     parser.add_argument("--datamode", default = "train")
-    parser.add_argument("--stage", default = "1ST")
     parser.add_argument("--fine_width", type=int, default = 384)
     parser.add_argument("--fine_height", type=int, default = 512)
     parser.add_argument("--radius", type=int, default = 5)
@@ -56,15 +54,11 @@ def get_opt():
     parser.add_argument("--keep_step", type=int, default = 50000)
     parser.add_argument("--decay_step", type=int, default = 50000)
     parser.add_argument("--shuffle", action='store_true', help='shuffle input data')
-    parser.add_argument("--half", action='store_true', help='use only half data')    
-  
-    
-    
 
     opt = parser.parse_args()
     return opt
 
-def train_WGVITON(opt, train_loader, Gmodel, Dmodel, board):
+def train_WGFVITON(opt, train_loader, Gmodel, Dmodel, board):
     gpus = [int(i) for i in opt.gpu_ids.split(',')]
     Gmodel = torch.nn.DataParallel(Gmodel, device_ids=gpus).cuda()
     Dmodel = torch.nn.DataParallel(Dmodel, device_ids=gpus).cuda()    
@@ -76,9 +70,7 @@ def train_WGVITON(opt, train_loader, Gmodel, Dmodel, board):
     criterionL1 = nn.L1Loss()
     criterionFeat = nn.L1Loss()
     criterionGAN = GANLoss('hinge', tensor=torch.cuda.HalfTensor)    
-    
-    #cirterionCE = nn.CrossEntropyLoss()
-    
+        
     # optimizer
     optimizerG = torch.optim.Adam(Gmodel.parameters(), lr=opt.lr, betas=(0.5, 0.999))
     schedulerG = torch.optim.lr_scheduler.LambdaLR(optimizerG, lr_lambda = lambda step: 1.0 -
@@ -94,11 +86,9 @@ def train_WGVITON(opt, train_loader, Gmodel, Dmodel, board):
     print('***** DATA: ', ndata)
     criterionVGG = VGGLoss()
     
-    lambda_l1, lambda_VGG, lambda_tv, lambda_iVGG, lambda_ADV_D, labmda_ADV_G, lambda_FM = 10.0, 1.0, 0.75, 8.0, 1.0, 1.0, 4.0
-    #lambda_wg = 30.0
+    lambda_l1, lambda_VGG, lambda_tv, lambda_iVGG, lambda_FM = 10.0, 1.0, 0.75, 8.0, 4.0
     lambda_wg = 60.0  
     lambda_wg2 = 0.2
-    #FM_weight = [0.03125, 0.0625, 0.125, 0.25, 0.5]    
 
     for step in range(opt.keep_step + opt.decay_step):
         nepoch = (step*opt.batch_size) / ndata
@@ -117,9 +107,7 @@ def train_WGVITON(opt, train_loader, Gmodel, Dmodel, board):
         bottom_m_cloth =  inputs['bottom_m_cloth'].cuda()
         top_m_seg = inputs['top_m_seg'].cuda()
         bottom_m_seg = inputs['bottom_m_seg'].cuda()        
-        #m_dp = inputs['model_dp'].cuda()
         m_seg = inputs['model_seg'].cuda()
-        #m_segmap = inputs['model_segmap'].cuda()
         
         ##<< [ SC : LOADING TOP ITEM ] 
         top_c_img = inputs['top_c_cloth'].cuda()
@@ -158,8 +146,7 @@ def train_WGVITON(opt, train_loader, Gmodel, Dmodel, board):
                 pred_real.append([tensor[tensor.size(0) // 2:] for tensor in p])
         else:
             pred_fake = pred[:pred.size(0) // 2]
-            pred_real = pred[pred.size(0) // 2:]
-        
+            pred_real = pred[pred.size(0) // 2:]        
         
         fake_loss = criterionGAN(pred_fake, False, for_discriminator=True)
         real_loss = criterionGAN(pred_real, True, for_discriminator=True)   
@@ -285,8 +272,7 @@ def train_WGVITON(opt, train_loader, Gmodel, Dmodel, board):
                 text_canvas_list.append(tmp)
                 
             text_canvas_np = np.array(text_canvas_list)
-            text_canvas_tensor = torch.from_numpy(text_canvas_np)
-            
+            text_canvas_tensor = torch.from_numpy(text_canvas_np)            
 
             vis_dp = vis_densepose(agnostic[:,0:25,:,:])     
                       
@@ -316,7 +302,8 @@ def train_WGVITON(opt, train_loader, Gmodel, Dmodel, board):
 def main():
     opt = get_opt()
     print(opt)
-    print("Start to train stage: %s, named: %s!" % (opt.stage, opt.name))
+    print("***** WGF-VITON TRAINING *****")    
+    print("***** Start to train stage: WGF-VITON, checkpoint named: %s!" % (opt.name))
      
     # create dataset 
     train_dataset = FTB_dataset(opt)
@@ -328,7 +315,7 @@ def main():
         os.makedirs(opt.tensorboard_dir)
     board = SummaryWriter(log_dir = os.path.join(opt.tensorboard_dir, opt.name))
 
-    Gmodel = WGVITON(opt, 6, opt.gen_semantic_nc,3 ,target_height=opt.fine_height)
+    Gmodel = WGFVITON(opt, 6, opt.gen_semantic_nc,3 ,target_height=opt.fine_height)
     Gmodel.print_network()
         
     if not opt.checkpoint =='' and os.path.exists(opt.checkpoint):
@@ -336,13 +323,13 @@ def main():
 
     Dmodel1 = create_network(MultiscaleDiscriminator,opt)
     if not opt.checkpointD =='' and os.path.exists(opt.checkpointD):
-        load_checkpoint(Dmodel, opt.checkpointD)                            
+        load_checkpoint(Dmodel1, opt.checkpointD)                            
             
     #221015: Use VITON-HR
-    train_WGVITON(opt, train_loader,Gmodel, Dmodel1,board)
+    train_WGFVITON(opt, train_loader,Gmodel, Dmodel1,board)
         
     print('forward done')
-    print('Finished training %s, nameed: %s!' % (opt.stage, opt.name))
+    print('Finished training WGF-VITON, checkpoint named: %s!' % (opt.name))
     exit(0)        
 
 
