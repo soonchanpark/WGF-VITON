@@ -19,11 +19,13 @@ pip install cupy
 ```
 
 ## Installation (Docker)
-The folder "docker" has Dockerfile to set docker images for running WGF-VITON
+The folder "docker" has Dockerfile to set docker images for running WGF-VITON.
 ```
 cd docker
 docker build . -t {docker_image_name}
 ```
+
+For the pre-trained model, you can donwload weights from WGF-VITON.
 
 ## Training
 
