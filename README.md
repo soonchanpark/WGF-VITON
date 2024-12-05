@@ -27,13 +27,13 @@ docker build . -t {docker_image_name}
 
 For the pre-trained model, you can donwload weights from WGF-VITON.
 
-## Training
+### Training
 
 ```python
 python train.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --keep_step 50000 --decay_step 150000 -b 4
 ```
 
-## Test
+### Test
 
 ```python
 python test.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --wearing {test json file} -b 8 --checkpoint {checkpoint_path}
