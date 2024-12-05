@@ -27,6 +27,12 @@ docker build . -t {docker_image_name}
 
 For the pre-trained model, you can donwload weights from WGF-VITON.
 
+### Downloads
+You can download dataset and pre-trained model via links below. Please note license policy of this work.
+
+Fashion-TB Dataset: link
+pre-trained model of WGF-VITON: link
+
 ### Training
 
 ```python
@@ -45,7 +51,7 @@ All material is made available under [Creative Commons BY-NC 4.0](https://creati
 
 ## Citation
 ```
-@article{park2022single,
+@article{park2024full,
   title={Full-body Virtual Try-on using Top and Bottom Garments with Wearing Style Control},
   author={Park, Soonchan and Park, Jinah},
   journal={Computer Vision and Image Understanding},
