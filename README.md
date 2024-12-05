@@ -2,10 +2,10 @@
 Official implementation for "Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control" published in Computer Vision and Image Understanding.
 The code and pre-trained models are tested with pytorch 1.31.1, torchvision 0.13.1, Python 3.8, CUDA 11.6.
 
-![Teaser](./fig_WGVITONresult3x3.png)
+Author: Soonchan Park and Jinah Park
+Paper link: (TBD)
 
-## Usage
-WGF-VITON is a single stage network to synthesize VITON image simultanously using top and bottom clothes with wearing style control.
+![Teaser](./fig_WGVITONresult3x3.png)
 
 ## Dataset : Fashion-TB
 ![Teaser](./data_teaser.png)
@@ -30,8 +30,8 @@ For the pre-trained model, you can donwload weights from WGF-VITON.
 ### Downloads
 You can download dataset and pre-trained model via links below. Please note license policy of this work.
 
-Fashion-TB Dataset: link
-pre-trained model of WGF-VITON: link
+Fashion-TB Dataset: (TBD)
+pre-trained model of WGF-VITON: (TBD)
 
 ### Training
 
