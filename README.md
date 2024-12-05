@@ -2,13 +2,19 @@
 Official implementation for "Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control" published in Computer Vision and Image Understanding.
 The code and pre-trained models are tested with pytorch 1.31.1, torchvision 0.13.1, Python 3.8, CUDA 11.6.
 
-Author: Soonchan Park and Jinah Park
+Author: Soonchan Park (ETRI) and Jinah Park (KAIST)
 Paper link: (TBD)
+Supplementary material: (TBD)
 
 ![Teaser](./fig_WGVITONresult3x3.png)
 
 ## Dataset : Fashion-TB
 ![Teaser](./data_teaser.png)
+
+Fashion-TB dataset consists of 37,492 wearing pairs between garments and fasion model.
+The fashion model can has multiple indices to point top and bottom garments what he/she is wearing. In dress case, such a model has only one index for top garment.
+
+You can download from the link: (TBD)
 
 ## Installation (Anaconda)
 ```
@@ -30,7 +36,6 @@ For the pre-trained model, you can donwload weights from WGF-VITON.
 ### Downloads
 You can download dataset and pre-trained model via links below. Please note license policy of this work.
 
-Fashion-TB Dataset: (TBD)
 pre-trained model of WGF-VITON: (TBD)
 
 ### Training
