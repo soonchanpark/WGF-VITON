@@ -1,9 +1,9 @@
 # Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control
 Official implementation for "_Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control_" published in _Computer Vision and Image Understanding_ in 2024.
 
-Author: Soonchan Park (ETRI) and Jinah Park (KAIST)
-Paper link: (TBD)
-Supplementary material: (TBD)
+* Author: Soonchan Park (ETRI) and Jinah Park (KAIST)
+* Paper link: (TBD)
+* Supplementary material: (TBD)
 
 ![Teaser](./fig_WGVITONresult3x3.png)
 
