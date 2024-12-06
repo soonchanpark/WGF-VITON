@@ -38,8 +38,9 @@ pip install cupy
 ```
 
 ## Downloads
-You can download dataset and pre-trained model via links below. Please note license policy of this work.
-* pre-trained model of WGF-VITON: (TBD)
+You can download dataset and pre-trained model via links below. Please note license policy of this work. 
+
+* pre-trained model of WGF-VITON: (TBD) 
 
 ## Training
 ```python
@@ -48,7 +49,7 @@ python train.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --kee
 
 ## Testing
 ```python
-python test.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --wearing {test json file} -b 8 --checkpoint {checkpoint_path}
+python test.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --wearing {test json file} --batch-size 8 --checkpoint {checkpoint_path}
 ```
 
 After inference dataset using the command above, you can evaluate the results in FID (https://github.com/mseitzer/pytorch-fid)
