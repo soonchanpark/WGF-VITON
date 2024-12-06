@@ -51,6 +51,8 @@ python train.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --kee
 python test.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --wearing {test json file} -b 8 --checkpoint {checkpoint_path}
 ```
 
+After inference dataset using the command above, you can evaluate the results in FID (https://github.com/mseitzer/pytorch-fid)
+
 ## License
 
 All material is made available under [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You can **use, redistribute, and adapt** the material for **non-commercial purposes**, as long as you give appropriate credit by **citing our paper** and **indicate any changes** that you've made.
