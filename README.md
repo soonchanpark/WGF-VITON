@@ -1,5 +1,5 @@
-# Release Schedule
-We are working on code arrangement. The code will be relased soon. 
+# *Release Schedule*
+*We are working on code arrangement. The code will be relased soon. *
 
 # Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control
 Official implementation for "_Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control_" published in _Computer Vision and Image Understanding_ in 2024.
