@@ -7,43 +7,48 @@ import numpy as np
 import argparse
 import os
 import time
-from FTB_dataset import FTB_dataset, FTBDataLoader
-from networks import WGVITON, load_checkpoint
-from networks import make_grid as mkgrid
+from FTB_dataset import FTBDataset, FTBDataLoader
+from networks import load_checkpoint, WGFVITON, make_grid as mkgrid
+
 
 from tensorboardX import SummaryWriter
-from visualization import board_add_image, board_add_images, save_images, save_parses, vis_densepose
+from visualization import board_add_image, board_add_images, save_images_etri, save_parses_etri, save_images, vis_one_hot_mask, vis_attention,vis_densepose
 import cv2
+
+from thop import profile
 
 def get_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--name", default = "WGVITON")
-    parser.add_argument("--gpu_ids", default = "")
-    parser.add_argument('-j', '--workers', type=int, default=1)
-    parser.add_argument('-b', '--batch-size', type=int, default=4)
+    parser.add_argument("--name", default = "WGFVITON_test")
+    parser.add_argument("--gpu_ids", default = "0")
+    parser.add_argument('--workers', type=int, default=2)
+    parser.add_argument('--batch-size', type=int, default=4)
     
-    parser.add_argument("--front_or_back", default = 0)
     parser.add_argument("--dataroot", default = "data")
-    parser.add_argument("--stage", default = "1ST")
     parser.add_argument("--fine_width", type=int, default = 384)
     parser.add_argument("--fine_height", type=int, default = 512)
-    parser.add_argument("--radius", type=int, default = 5)
-    parser.add_argument("--grid_size", type=int, default = 5)
+    parser.add_argument('--wearing', type=str, default='', help='wearing_file')    
     parser.add_argument('--tensorboard_dir', type=str, default='tensorboard', help='save tensorboard infos')
     parser.add_argument('--result_dir', type=str, default='result', help='save result infos')
     parser.add_argument('--checkpoint', type=str, default='', help='model checkpoint for test')
+
     parser.add_argument("--display_count", type=int, default = 1)
     parser.add_argument("--shuffle", action='store_true', help='shuffle input data')
-    parser.add_argument('--wearing', type=str, default='', help='wearing_file')    
+    
+    #parser.add_argument('--doubled', action='store_true', help='doubled resolution for inferring warping')
+    #parser.add_argument("--low", action='store_true', help='using low resolution')        
+    
+    
+    parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate for adam')    
 
     opt = parser.parse_args()
     return opt
 
-def test_WGVITON(opt, test_loader, model, board):
+def test(opt, test_loader, model, board):
 
-    model.eval()
+    #model.eval()
     base_name = os.path.basename(opt.name)
-    save_dir = os.path.join(opt.result_dir, base_name)
+    save_dir = os.path.join(opt.result_dir, base_name, 'test')
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
         
@@ -66,6 +71,9 @@ def test_WGVITON(opt, test_loader, model, board):
         bottom_m_cloth =  inputs['bottom_m_cloth'].cuda()
         top_m_seg = inputs['top_m_seg'].cuda()
         bottom_m_seg = inputs['bottom_m_seg'].cuda()        
+        #m_dp = inputs['model_dp'].cuda()
+        #m_seg = inputs['model_seg'].cuda()
+        #m_segmap = inputs['model_segmap'].cuda()
         
         ##<< [ SC : LOADING TOP ITEM ] 
         top_c_img = inputs['top_c_cloth'].cuda()
@@ -74,7 +82,8 @@ def test_WGVITON(opt, test_loader, model, board):
         ##<< [ SC : LOADING BOTTOM ITEM ]         
         bottom_c_img = inputs['bottom_c_cloth'].cuda()
         bottom_c_seg = inputs['bottom_c_seg'].cuda()     
-                
+        
+        
         ##<< [ SC : VISUALIZATION ] 
         im_g = inputs['grid_image'].cuda()
         im_occ = inputs['occ_parse'].cuda()
@@ -107,7 +116,7 @@ def test_WGVITON(opt, test_loader, model, board):
                     [bottom_c_img, warped_bt, bottom_m_cloth],
                     [grid_warped_top, grid_warped_bt, grid_warped_bt],                    
                     [(warped_top+warped_bt)*0.5, agnostic[:,63:64,:,:], fake_images]]        
-       
+      
         save_images(fake_images, m_names, try_on_dir)
         
         if (step+1) % opt.display_count == 0:
@@ -115,14 +124,35 @@ def test_WGVITON(opt, test_loader, model, board):
             t = time.time() - iter_start_time
             print('step: %8d, time: %.3f' % (step+1, t), flush=True)
 
+def tensor2img(input_tensor):
+     num_channel = input_tensor.size(0)
+     vis_tensor = input_tensor.clone()
+     min = float(vis_tensor.min())
+     max = float(vis_tensor.max())
+
+     vis_tensor.add_(-min).div_(max - min + 1e-5)
+
+     vis_tensor = vis_tensor.mul(255)\
+                 .clamp(0, 255)\
+                 .byte()\
+                 .permute(1, 2, 0)\
+                 .cpu().numpy()
+
+     rgb_arr = vis_tensor.copy()
+     if num_channel==3:
+         rgb_arr[:,:,0] = vis_tensor[:,:,2]
+         rgb_arr[:,:,1] = vis_tensor[:,:,1]
+         rgb_arr[:,:,2] = vis_tensor[:,:,0]
+
+     return rgb_arr
+
 def main():
     opt = get_opt()
     print(opt)
     opt.datamode = 'test'
-    print("Start to test stage: %s, named: %s!" % (opt.stage, opt.name))
+    print("Start to test WGFVITON, named: %s!" % (opt.name))
     # create dataset 
-    train_dataset = FTB_dataset(opt, is_train=False)
-
+    train_dataset = FTBDataset(opt, is_train=False)
     # create dataloader
     train_loader = FTBDataLoader(opt, train_dataset)
 
@@ -130,17 +160,17 @@ def main():
     if not os.path.exists(opt.tensorboard_dir):
         os.makedirs(opt.tensorboard_dir)
     board = SummaryWriter(log_dir = os.path.join(opt.tensorboard_dir, opt.name))
-   
-    model = WGVITON(opt, 6, 64, 3, target_height=opt.fine_height)
+    
+    model = WGFVITON(opt, 6, 64, 3, target_height=opt.fine_height)
     gpus = [int(i) for i in opt.gpu_ids.split(',')]
     model = torch.nn.DataParallel(model, device_ids=gpus).cuda()
     if not os.path.isfile(opt.checkpoint):
         print('FILE DOES NOT EXIST:', opt.checkpoint)
     load_checkpoint(model, opt.checkpoint)
     with torch.no_grad():
-        test_WGVITON(opt, train_loader, model,board)           
-      
-    print('Finished test %s, named: %s!' % (opt.stage, opt.name))
+        test(opt, train_loader, model,board)                                            
+  
+    print('Finished test WGFVITON, named: %s!' % (opt.name))
 
 if __name__ == "__main__":
     main()
