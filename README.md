@@ -5,8 +5,8 @@
 Official implementation for "_Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control_" published in _Computer Vision and Image Understanding_ in 2024.
 
 * Author: Soonchan Park and Jinah Park
-* Paper link: (TBD)
-* Supplementary material: (TBD)
+* Paper link: https://www.sciencedirect.com/science/article/pii/S1077314224003400
+* Supplementary material: https://ars.els-cdn.com/content/image/1-s2.0-S1077314224003400-mmc1.pdf
 
 ![Teaser](./fig_WGVITONresult3x3.png)
 
