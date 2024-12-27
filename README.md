@@ -64,10 +64,12 @@ All material is made available under [Creative Commons BY-NC 4.0](https://creati
 
 ```
 @article{park2024full,
-  title={Full-body Virtual Try-on using Top and Bottom Garments with Wearing Style Control},
+  title={Full-body virtual try-on using top and bottom garments with wearing style control},
   author={Park, Soonchan and Park, Jinah},
   journal={Computer Vision and Image Understanding},
-  year={2024}
+  pages={104259},
+  year={2024},
+  publisher={Elsevier}
 }
 ```
 
