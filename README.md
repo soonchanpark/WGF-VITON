@@ -1,6 +1,3 @@
-# *Release History*
-24.12.27. WGF-VITON version 1.0 is now available.
-
 # Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control
 Official implementation for "_Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control_" published in _Computer Vision and Image Understanding_ in 2024.
 
