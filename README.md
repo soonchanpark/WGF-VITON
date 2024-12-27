@@ -16,8 +16,6 @@ Official implementation for "_Full-body Virtual Try-On using Top and Bottom Garm
 Fashion-TB dataset consists of 37,492 wearing pairs between garments and fasion model.
 The fashion model can has multiple indices to point top and bottom garments what he/she is wearing. In dress case, such a model has only one index for top garment.
 
-* You can download from the link: (TBD)
-
 ## Installation 
 The project have been tested with the following environment:
 * PyTorch 1.13.1
