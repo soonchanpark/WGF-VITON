@@ -1,9 +1,5 @@
-# *Release Schedule*
-*We are working on code arrangement. The code will be relased soon. *
-
-
-
-
+# *Release History*
+24.12.27. WGF-VITON version 1.0 is now available.
 
 # Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control
 Official implementation for "_Full-body Virtual Try-On using Top and Bottom Garments with Wearing Style Control_" published in _Computer Vision and Image Understanding_ in 2024.
@@ -47,16 +43,17 @@ pip install cupy
 ## Downloads
 You can download dataset and pre-trained model via links below. Please note license policy of this work. 
 
-* pre-trained model of WGF-VITON: (TBD) 
+* pre-trained model of WGF-VITON and Fashion-TB: https://drive.google.com/drive/folders/12PoisAUqyyA4AOWjXMdFJlR4OrI9DrcO?usp=sharing
+* released version of WGF-VITON has 6.72 FID in the unpaired dataset. It is achieved by a longer training without any modification.
 
 ## Training
 ```python
-python train.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --keep_step 50000 --decay_step 150000 -b 4
+CUDA_VISIBLE_DEVICES=0,1 python train.py --dataroot {data_path} --gpu_ids 0,1 --batch-size 4 --name {project_name} --workers 6 --keep_step 100000 --decay_step 100000 --shuffle --fine_height 512 --fine_width 384 --num_D 2 --lr_D 0.0002
 ```
 
 ## Testing
 ```python
-python test.py --name {project_name} --gpu_ids 0,1 --dataroot {data_path} --wearing {test json file} --batch-size 8 --checkpoint {checkpoint_path}
+CUDA_VISIBLE_DEVICES=2 python test.py --name {project_name} --batch-size 8 --workers 1 --checkpoint {checkpoint_path}/step_G_200000.pth --wearing test_unpair_mild.json --dataroot {data_path} --gpu_ids 0
 ```
 
 After inference dataset using the command above, you can evaluate the results in FID (https://github.com/mseitzer/pytorch-fid)
