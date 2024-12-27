@@ -42,7 +42,7 @@ pip install cupy
 You can download dataset and pre-trained model via links below. Please note license policy of this work. 
 
 * pre-trained model of WGF-VITON and Fashion-TB: https://drive.google.com/drive/folders/12PoisAUqyyA4AOWjXMdFJlR4OrI9DrcO?usp=sharing
-* released version of WGF-VITON has 6.72 FID in the unpaired dataset. It is achieved by a longer training without any modification.
+* released version of **WGF-VITON has 6.72 FID** in the unpaired dataset. It is achieved by a longer training without any modification.
 
 ## Training
 ```python
